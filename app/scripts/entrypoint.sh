@@ -1,3 +1,3 @@
 #!/bin/bash
 
-gunicorn main.wsgi -b :8000
+gunicorn main.wsgi -b :8000 --reload
