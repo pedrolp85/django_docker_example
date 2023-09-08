@@ -173,9 +173,52 @@ q.save()
 
 # Admin Panel
 
+app/encuesta/admin.py
 
 from django.contrib import admin
 from .models import Question
 
 admin.site.register(Question)
-# Register your models here.
+
+
+# Vistas basadas en métodos
+
+Django recorre los patrones según la url:
+
+app/main/urls.py
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path("polls/", include("encuesta.urls"))
+]
+
+La clase include de django sirve para delegar rutas
+a otros ficheros
+En este caso para /polls/ va a usar el mapping de (app/encuesta/urls.py)
+
+app/encuesta/urls.py
+
+urlpatterns = [ 
+               path("", views.index, name="listado_preguntas"),
+               path("<str:question_id>/", views.detail, name = "detalle"),
+               path("<int:question_id>/results/", views.results, name = "resultados"),
+               path("<int:question_id>/vote/", views.vote, name = "vote"),
+            ]
+
+
+Esto es un mapeo de parámetros de url
+
+path("<int:question_id>/", views.detail, name = "detalle"),
+
+/polls/1/ -> tiene que ser un entero, va a invocar al método de la vista detail() y se lo pasa como parámetro en la variable question_id
+
+Si ponemos un string: /polls/hola:
+
+backend_1  | Not Found: /polls/hola/
+backend_1  | [02/Sep/2023 08:49:49] "GET /polls/hola/ HTTP/1.1" 404 2879
+
+
+Otros convertidores de parámetros
+
+<str:>
+<slug:> palabras separadas con guiones

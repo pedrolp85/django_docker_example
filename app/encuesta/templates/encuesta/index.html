@@ -1,0 +1,8 @@
+{% block content %}
+    <h2>Preguntas</h2>
+    <ul>
+        {% for pregunta in listado_ultimas_preguntas %}
+            <li>{{ pregunta.publication_date }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
