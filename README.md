@@ -10,16 +10,17 @@ djangoadmin starproject <project_name>
 Va a crear:
 - Carpeta raíz
 - Archivo manage.py
-- Estructura
 
+Estructura:
+
+    project_name/
+        manage.py
         project_name/
-            manage.py
-            project_name/
-                __init__.py
-                settings.py -> ajustes para todo el proyecto
-                urls.py     -> URLs para todo el proyecto
-                asgi.py
-                wsgi.py
+            __init__.py
+            settings.py -> ajustes para todo el proyecto
+            urls.py     -> URLs para todo el proyecto
+            asgi.py
+            wsgi.py
 
 # Crear una app
 
@@ -60,12 +61,13 @@ De forma muy general:
 - Cada modelo extiende de models.Model
 - Cada modelo es una clase que representa una tabla de BBDD
 - Cada atributo es una fila de la tabla
- 
 
-        from django.db import models
+Ejemplo: 
 
-        class Clientes(models.Model):
-            nombre = models.CharField(max_lenght=30)
+    from django.db import models
+
+    class Clientes(models.Model):
+        nombre = models.CharField(max_lenght=30)
 
 # Crear una vista
 
@@ -81,22 +83,49 @@ Siempre reciben request como argumento
 
 # URLS
 
-Los fichero URL.py asocian las URL a las que llegan las peticiones con un método vista 
-Hay varios sitios donde configurarlas:
+Los fichero urls.py asocian las URL a las que llegan las peticiones con un método vista 
+La clase include de django sirve para delegar rutas en los urls.py de aplicación
 
-### project_name/urls.py -> generales para el proyecto redirigen a las de aplicación
+### project_name/urls.py
     urlpatterns = [
         path('admin/', admin.site.urls),
         path("encuesta/", include("encuesta.urls"))
     ]
 
-### app_name/urls.py -> Contiene la configuración que apunta a las vistas
+### app_name/urls.py 
     app_name = "encuesta"
 
     urlpatterns = [ 
                 path("", views.index, name="listado_preguntas"),
                 path("<str:question_id>/", views.detail, name = "detalle"),
                 ]
+
+## Mapeo de parámetros
+
+    urlpatterns = [ 
+                path("", views.index, name="listado_preguntas"),
+                path("<str:question_id>/", views.detail, name = "detalle"),
+                path("<int:question_id>/results/", views.results, name = "resultados"),
+                path("<int:question_id>/vote/", views.vote, name = "vote"),
+                ]
+
+
+Esto es un mapeo de parámetros de url:
+
+    path("<int:question_id>/", views.detail, name = "detalle"),
+
+/polls/1/ -> tiene que ser un entero, va a invocar al método de la vista detail() y se lo pasa como parámetro en la variable question_id
+
+Si ponemos un string: /polls/hola:
+
+    backend_1  | Not Found: /polls/hola/
+    backend_1  | [02/Sep/2023 08:49:49] "GET /polls/hola/ HTTP/1.1" 404 2879
+
+
+Otros convertidores de parámetros
+
+    <str:>
+    <slug:> palabras separadas con guiones
 
 
 ## Create migration files:
@@ -249,45 +278,7 @@ admin.site.register(Question)
 
 # Vistas basadas en métodos
 
-Django recorre los patrones según la url:
 
-app/main/urls.py
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path("polls/", include("encuesta.urls"))
-]
-
-La clase include de django sirve para delegar rutas
-a otros ficheros
-En este caso para /polls/ va a usar el mapping de (app/encuesta/urls.py)
-
-app/encuesta/urls.py
-
-urlpatterns = [ 
-               path("", views.index, name="listado_preguntas"),
-               path("<str:question_id>/", views.detail, name = "detalle"),
-               path("<int:question_id>/results/", views.results, name = "resultados"),
-               path("<int:question_id>/vote/", views.vote, name = "vote"),
-            ]
-
-
-Esto es un mapeo de parámetros de url
-
-path("<int:question_id>/", views.detail, name = "detalle"),
-
-/polls/1/ -> tiene que ser un entero, va a invocar al método de la vista detail() y se lo pasa como parámetro en la variable question_id
-
-Si ponemos un string: /polls/hola:
-
-backend_1  | Not Found: /polls/hola/
-backend_1  | [02/Sep/2023 08:49:49] "GET /polls/hola/ HTTP/1.1" 404 2879
-
-
-Otros convertidores de parámetros
-
-<str:>
-<slug:> palabras separadas con guiones
 
 
 
@@ -319,7 +310,7 @@ postgres=# \dt+
 ### show users
 
 ```console
-    postgres=# \du
+postgres=# \du
 ```
 ### ver descripcion de la tabla
 
