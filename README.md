@@ -1,4 +1,4 @@
-# django_docker_example
+# Introducción a Django
 
 # Crear un Proyecto de Django
 
