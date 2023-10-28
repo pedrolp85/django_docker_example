@@ -1,66 +1,135 @@
 # django_docker_example
 
-#Postgres cheatsheet
+## Postgres cheatsheet
 
-connect to container:
+## connect to container:
     docker exec -it <container_postgres> /bin/bash
     $psql -U postgres
 
-list databases:
-postgres=#  \l
+## list databases:
+    postgres=#  \l
 
-use database:
-postgres=# \c <nombre_db>
+## use database:
+    postgres=# \c <nombre_db>
 
-show tables
-postgres=# \dt+
+## show tables
+    postgres=# \dt+
 
-show users
-postgres=# \du
+## show users
+    postgres=# \du
 
-ver descripcion de la tabla
+## ver descripcion de la tabla
 
-\d <nombre_tabla>
+    \d <nombre_tabla>
+
+# Crear un Proyecto de Django
+
+    $djangoadmin starproject <project_name>
+
+Va a crear:
+- Carpeta raíz
+- Archivo manage.py
+- Estructura
+
+    project_name/
+        manage.py
+        project_name/
+            __init__.py
+            settings.py -> ajustes para todo el proyecto
+            urls.py     -> URLs para todo el proyecto
+            asgi.py
+            wsgi.py
+
+# Crear una app
+
+    $python manage.py startapp <app_name>
+
+Crea la estructura de la aplicación dentro del proyecto:
+
+    project_name/
+        manage.py
+        project_name/
+        app_name/
+            admin.py -> Panel de aministración 
+            apps.py ->  Config de aplicación
+            test.py -> tests
+            models.py -> Modelos de la base de datos
+            views.py  -> Lógica de la aplicación
 
 
-# Create a Django Project
+## Add the app to installed apps settings.py:
 
-$python manage.py starproject <project_name>
+    INSTALLED_APPS = [
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        'encuesta.apps.EncuestaConfig'
+    ]
 
-# Create an app
+# Crear un modelo de base de datos <app_name.models.py>
 
-$python manage.py startapp <app_name>
+De forma muy general: 
 
-#Add the app to installed apps settings.py:
+- Cada modelo extiende de models.Model
+- Cada modelo es una clase que representa una tabla de BBDD
+- Cada atributo es una fila de la tabla
+ 
 
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'encuesta.apps.EncuestaConfig'
-]
+    from django.db import models
+    
+    class Clientes(models.Model):
+      nombre = models.CharField(max_lenght=30)
+
+# Crear una vista
+
+Son las que contienen la lógica de la aplicación
+Reciben una solicitud, la procesan y devuelven una respuesta
+Siempre reciben request como argumento
+
+    from django.http import HttpResponse
+
+    def index(request):
+        return HttpResponse("Esto es el retorno")
 
 
-#Create new models at <app_name.models.py>
+# URLS
 
-#Create migration files:
+Los fichero URL.py asocian las URL a las que llegan las peticiones con un método vista 
+Hay varios sitios donde configurarlas:
 
-$python manage.py makemigrations <app_name>
+### project_name/urls.py -> generales para el proyecto redirigen a las de aplicación
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path("encuesta/", include("encuesta.urls"))
+    ]
+
+### app_name/urls.py -> Contiene la configuración que apunta a las vistas
+    app_name = "encuesta"
+
+    urlpatterns = [ 
+                path("", views.index, name="listado_preguntas"),
+                path("<str:question_id>/", views.detail, name = "detalle"),
+                ]
+
+
+## Create migration files:
+
+    $python manage.py makemigrations <app_name>
 
 
 # Translate migrations into SQL commands(Optional)
 
-$python manage.py sqlmigrate <nombre_app> <num_migration>
+    $python manage.py sqlmigrate <nombre_app> <num_migration>
 
 
 # Dry run migration (Optional)
 
-#Run migrations
+# Run migrations
 
-$python manage.py migrate <nombre_app> <num_migration>
+    $python manage.py migrate <nombre_app> <num_migration>
 
 #Interactuar con la shell de python(database)
 
