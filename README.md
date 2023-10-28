@@ -42,7 +42,10 @@ Va a crear:
 
 # Crear una app
 
-    $python manage.py startapp <app_name>
+```console
+python manage.py startapp <app_name>
+```
+
 
 Crea la estructura de la aplicación dentro del proyecto:
 
