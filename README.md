@@ -1,44 +1,25 @@
 # django_docker_example
 
-## Postgres cheatsheet
-
-## connect to container:
-    docker exec -it <container_postgres> /bin/bash
-    $psql -U postgres
-
-## list databases:
-    postgres=#  \l
-
-## use database:
-    postgres=# \c <nombre_db>
-
-## show tables
-    postgres=# \dt+
-
-## show users
-    postgres=# \du
-
-## ver descripcion de la tabla
-
-    \d <nombre_tabla>
-
 # Crear un Proyecto de Django
 
-    $djangoadmin starproject <project_name>
+```console
+djangoadmin starproject <project_name>
+```
+
 
 Va a crear:
 - Carpeta raíz
 - Archivo manage.py
 - Estructura
 
-    project_name/
-        manage.py
         project_name/
-            __init__.py
-            settings.py -> ajustes para todo el proyecto
-            urls.py     -> URLs para todo el proyecto
-            asgi.py
-            wsgi.py
+            manage.py
+            project_name/
+                __init__.py
+                settings.py -> ajustes para todo el proyecto
+                urls.py     -> URLs para todo el proyecto
+                asgi.py
+                wsgi.py
 
 # Crear una app
 
@@ -81,10 +62,10 @@ De forma muy general:
 - Cada atributo es una fila de la tabla
  
 
-    from django.db import models
-    
-    class Clientes(models.Model):
-      nombre = models.CharField(max_lenght=30)
+        from django.db import models
+
+        class Clientes(models.Model):
+            nombre = models.CharField(max_lenght=30)
 
 # Crear una vista
 
@@ -120,44 +101,57 @@ Hay varios sitios donde configurarlas:
 
 ## Create migration files:
 
-    $python manage.py makemigrations <app_name>
+```console
+python manage.py makemigrations <app_name>
+```
+
 
 
 # Translate migrations into SQL commands(Optional)
 
-    $python manage.py sqlmigrate <nombre_app> <num_migration>
+```console
+$python manage.py sqlmigrate <nombre_app> <num_migration>
+```
+
 
 
 # Dry run migration (Optional)
 
 # Run migrations
 
-    $python manage.py migrate <nombre_app> <num_migration>
+```console
+python manage.py migrate <nombre_app> <num_migration>
+```
 
-#Interactuar con la shell de python(database)
 
-$python manage.py shell
+
+# Interactuar con la shell de python(database)
+
+```console
+python manage.py shell
+```
 
 La clase Question es hija de la clase de Django Models.model, que implementa métodos para acceder al contenido de
 la base de datos. Django abstrae la conexión de forma que no nos importa qué base de datos usemos
 
-    >>>from encuesta.models import Choice, Question
-    >>>Question.objects.all()
-        <QuerySet []>
+from encuesta.models import Choice, Question
+Question.objects.all()
+    <QuerySet []>
 
-    >>>Choice.objects.all()
-        <QuerySet []>
 
-    >>> from django.utils import timezone
-    >>> q = Question(question_text="primera pregunta", publication_date=timezone.now())
-    >>> dir(q)
+Choice.objects.all()
+<QuerySet []>
 
-    >>> q.save()
-    >>> q.id
-        1
+from django.utils import timezone
+q = Question(question_text="primera pregunta", publication_date=timezone.now())
+dir(q)
 
-    >>> Question.objects.all()
-        <QuerySet [<Question: Question object (1)>, <Question: Question object (2)>]>
+q.save()
+q.id
+1
+
+Question.objects.all()
+<QuerySet [<Question: Question object (1)>, <Question: Question object (2)>]>
 
 # Cambiamos el método str para ver los objetos human readable
 
@@ -294,3 +288,41 @@ Otros convertidores de parámetros
 
 <str:>
 <slug:> palabras separadas con guiones
+
+
+
+## Postgres cheatsheet
+
+### connect to container:
+
+```console
+docker exec -it <container_postgres> /bin/bash
+psql -U postgres
+```
+
+### list databases:
+
+```console
+postgres=#  \l
+```
+
+### use database:
+
+```console
+postgres=# \c <nombre_db>
+```
+### show tables
+
+```console
+postgres=# \dt+
+```
+### show users
+
+```console
+    postgres=# \du
+```
+### ver descripcion de la tabla
+
+```console
+\d <nombre_tabla>
+```
