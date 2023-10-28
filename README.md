@@ -54,7 +54,7 @@ Crea la estructura de la aplicación dentro del proyecto:
         'encuesta.apps.EncuestaConfig'
     ]
 
-# Crear un modelo de base de datos <app_name.models.py>
+# Modelos
 
 De forma muy general: 
 
@@ -69,7 +69,7 @@ Ejemplo:
     class Clientes(models.Model):
         nombre = models.CharField(max_lenght=30)
 
-# Crear una vista
+# Vistas
 
 Son las que contienen la lógica de la aplicación
 Reciben una solicitud, la procesan y devuelven una respuesta
@@ -128,12 +128,11 @@ Otros convertidores de parámetros
     <slug:> palabras separadas con guiones
 
 
-## Create migration files:
+# Crear ficheros de migraciónes de BDD
 
 ```console
 python manage.py makemigrations <app_name>
 ```
-
 
 
 # Translate migrations into SQL commands(Optional)
@@ -141,7 +140,6 @@ python manage.py makemigrations <app_name>
 ```console
 $python manage.py sqlmigrate <nombre_app> <num_migration>
 ```
-
 
 
 # Dry run migration (Optional)
