@@ -2,7 +2,7 @@
     <h2>Preguntas</h2>
     <ul>
         {% for pregunta in listado_ultimas_preguntas %}
-            <li>{{ pregunta.publication_date }}</li>
+            <li><a href="{% url 'encuesta:detalle' pregunta.id %}">{{ pregunta.question_text }} {{ pregunta.publication_date | date:"Y-m-d" }}</li>
         {% endfor %}
     </ul>
 {% endblock %}

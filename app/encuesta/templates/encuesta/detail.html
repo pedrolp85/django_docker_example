@@ -1,0 +1,18 @@
+<form action="{% url 'encuesta:vote' question.id %}" method="post">
+<!-- Etiqueta de protección CSRF -->
+{% csrf_token %}
+<fieldset>
+        <legend><h1>{{ question.question_text }}</h1></legend>
+        <!-- Muestra los errores que puedes aparecer -->
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        <!-- Bucle por las respuestas que tiene la pregunta -->
+        {% for choice in question.choice_set.all %}
+            <!-- {{ forloop.counter }}  Variable. Contador de loops
+                value="{{ choice.id }} Id de la selección -->
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %}
+</fieldset>
+<input type="submit" value="Vote">
+</form>
+   
